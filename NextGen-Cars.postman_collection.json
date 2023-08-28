@@ -1,0 +1,97 @@
+{
+	"info": {
+		"_postman_id": "00aa8173-6cfc-4b17-8d58-64fe221c29cd",
+		"name": "NextGen-Cars",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "738795"
+	},
+	"item": [
+		{
+			"name": "Car list",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/cars",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"cars"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Car Get By Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/car/cjmg09da855l1j6q9240",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"car",
+						"cjmg09da855l1j6q9240"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Car Post",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"JHk590Xj\",\r\n    \"make\": \"Chevrolet\",\r\n    \"model\": \"Malibu\",\r\n    \"package\": \"Base\",\r\n    \"color\": \"Red\",\r\n    \"year\": 2005,\r\n    \"category\": \"Sedan\",\r\n    \"milage\": 1000123,\r\n    \"price\": 1050900000\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/car/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"car",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Car Post Copy",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"JHk590Xj\",\r\n    \"make\": \"Chevrolet\",\r\n    \"model\": \"Malibu\",\r\n    \"package\": \"Base\",\r\n    \"color\": \"Red\",\r\n    \"year\": 2005,\r\n    \"category\": \"Sedan\",\r\n    \"milage\": 1000123,\r\n    \"price\": 105100\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/car/cjmhaeta855os37c3bvg",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"car",
+						"cjmhaeta855os37c3bvg"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

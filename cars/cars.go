@@ -60,7 +60,7 @@ func HandleCar(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		newCar.ID = utils.GenerateUID()
+		newCar.UID = utils.GenerateUID()
 		cars = append(cars, newCar)
 		w.WriteHeader(http.StatusCreated)
 		log.Println("POST /car/", newCar.ID)
@@ -76,7 +76,7 @@ func HandleCar(w http.ResponseWriter, r *http.Request) {
 			http.NotFound(w, r)
 			return
 		}
-		updatedCar.ID = id
+		updatedCar.UID = id
 		cars[index] = updatedCar
 		w.WriteHeader(http.StatusOK)
 		log.Println("PUT /car/", id)
