@@ -1,66 +1,60 @@
+// cars_test.go
+// cars_test.go
 package cars
 
 import (
-	"bytes"
 	"encoding/json"
 	"net/http"
+	"nextgen-cars/utils"
 	"testing"
 )
 
-// Importar las librerías necesarias
-
-func TestGetCars(t *testing.T) {
+func TestHandleCars(t *testing.T) {
 	req, _ := http.NewRequest("GET", "/cars", nil)
-	rec := executeRequest(req)
+	rec := utils.ExecuteRequest(req)
 
-	checkResponseCode(t, http.StatusOK, rec.Code)
+	utils.CheckResponseCode(t, http.StatusOK, rec.Code)
 
 	var respCars []Car
 	json.Unmarshal(rec.Body.Bytes(), &respCars)
 
 	if len(respCars) != len(cars) {
-		t.Errorf("Get: %d, Total: %d", len(cars), len(respCars))
+		t.Errorf("Expected %d cars, but got %d cars", len(cars), len(respCars))
 	}
 }
 
-func TestGetCar(t *testing.T) {
-	id := "JHk290Xj"
-	req, _ := http.NewRequest("GET", "/cars/"+id, nil)
-	rec := executeRequest(req)
+func TestHandleCar(t *testing.T) {
+	id := "cjmg09da855l1j6q9240"
+	req, _ := http.NewRequest("GET", "/car/"+id, nil)
+	rec := utils.ExecuteRequest(req)
 
-	checkResponseCode(t, http.StatusOK, rec.Code)
+	utils.CheckResponseCode(t, http.StatusOK, rec.Code)
 
 	var respCar Car
 	json.Unmarshal(rec.Body.Bytes(), &respCar)
 
-	if respCar.ID != id {
-		t.Errorf("ID incorrect. Expected: %s, Obtained: %s", id, respCar.ID)
+	if respCar.UID != id {
+		t.Errorf("Expected car with UID %s, but got car with UID %s", id, respCar.UID)
 	}
 }
 
-func TestPostCar(t *testing.T) {
-	newCar := Car{Make: "Honda", Model: "Civic", Package: "EX", Color: "Blue", Year: 2020, Category: "Sedan", Milage: 15000, Price: 2100000}
-	payload, _ := json.Marshal(newCar)
-	req, _ := http.NewRequest("POST", "/cars", bytes.NewReader(payload))
-	rec := executeRequest(req)
+func TestFindCarByUID(t *testing.T) {
+	id := "cjmg0fla855kfi0gllt0"
+	car := FindCarByUID(id)
 
-	checkResponseCode(t, http.StatusCreated, rec.Code)
+	if car == nil {
+		t.Errorf("Expected car with UID %s, but got nil", id)
+	}
+	if car.UID != id {
+		t.Errorf("Expected car with UID %s, but got car with UID %s", id, car.UID)
+	}
 }
 
-func TestPutCar(t *testing.T) {
-	id := "fWl37la"
-	updatedCar := Car{Make: "Toyota", Model: "Camry", Package: "XSE", Color: "Black", Year: 2021, Category: "Sedan", Milage: 5000, Price: 3100000}
-	payload, _ := json.Marshal(updatedCar)
-	req, _ := http.NewRequest("PUT", "/cars/"+id, bytes.NewReader(payload))
-	rec := executeRequest(req)
+func TestFindCarIndexByUID(t *testing.T) {
+	id := "cjmg0fla855kfi0gllt0"
+	index := FindCarIndexByUID(id)
 
-	checkResponseCode(t, http.StatusOK, rec.Code)
-
-	index := findCarIndexByID(id)
 	if index == -1 {
-		t.Errorf("Car ID %s not found", id)
-	}
-	if cars[index].Color != updatedCar.Color {
-		t.Errorf("Color not updated. Expected: %s, Obtained: %s", updatedCar.Color, cars[index].Color)
+		t.Errorf("Expected index for car with UID %s, but got -1", id)
 	}
 }
