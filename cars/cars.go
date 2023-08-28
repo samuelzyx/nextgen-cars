@@ -30,15 +30,15 @@ var cars = []Car{
 }
 
 func HandleCars(w http.ResponseWriter, r *http.Request) {
-	switch r.Method {
-	case http.MethodGet:
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(cars)
-		log.Println("GET /cars")
-	default:
+	if r.Method != http.MethodGet {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		log.Println("Invalid method:", r.Method)
+		return
 	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(cars)
+	log.Println("GET /cars")
 }
 
 func HandleCar(w http.ResponseWriter, r *http.Request) {

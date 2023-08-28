@@ -4,19 +4,23 @@ package cars
 
 import (
 	"encoding/json"
+	"fmt"
+	"io/ioutil"
 	"net/http"
+	"net/http/httptest"
 	"nextgen-cars/utils"
 	"testing"
 )
 
 func TestHandleCars(t *testing.T) {
-	req, _ := http.NewRequest("GET", "/cars", nil)
-	rec := utils.ExecuteRequest(req)
+	server := httptest.NewServer(http.HandlerFunc(HandleCars))
+	resp, _ := http.Get(server.URL)
 
-	utils.CheckResponseCode(t, http.StatusOK, rec.Code)
+	utils.CheckResponseCode(t, http.StatusOK, resp.StatusCode)
 
 	var respCars []Car
-	json.Unmarshal(rec.Body.Bytes(), &respCars)
+	results, _ := ioutil.ReadAll(resp.Body)
+	json.Unmarshal(results, &respCars)
 
 	if len(respCars) != len(cars) {
 		t.Errorf("Expected %d cars, but got %d cars", len(cars), len(respCars))
@@ -25,13 +29,16 @@ func TestHandleCars(t *testing.T) {
 
 func TestHandleCar(t *testing.T) {
 	id := "cjmg09da855l1j6q9240"
-	req, _ := http.NewRequest("GET", "/car/"+id, nil)
-	rec := utils.ExecuteRequest(req)
 
-	utils.CheckResponseCode(t, http.StatusOK, rec.Code)
+	server := httptest.NewServer(http.HandlerFunc(HandleCar))
+	resp, _ := http.Get(server.URL + "/car/" + id)
+	fmt.Println(server.URL + "/car/" + id)
+
+	utils.CheckResponseCode(t, http.StatusOK, resp.StatusCode)
 
 	var respCar Car
-	json.Unmarshal(rec.Body.Bytes(), &respCar)
+	result, _ := ioutil.ReadAll(resp.Body)
+	json.Unmarshal(result, &respCar)
 
 	if respCar.UID != id {
 		t.Errorf("Expected car with UID %s, but got car with UID %s", id, respCar.UID)
